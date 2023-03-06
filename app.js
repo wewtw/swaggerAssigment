@@ -14,81 +14,152 @@ const swaggerOptions = {
             version: "1.0.0"
         }
     },
-        apis: ["app.js"]
-}
-/**
- * @swagger
- * /restaurants:
- *  get:
- *      summary: get all restaurants
- *      produces:
- *          application/json
- *  responses:
- *      200: success
- *      description : an array of restaurants
- *      schema:
- *          $ref: "#definitions/restaurant"
- * definitions:
- *  restaurant:
- *      properties:
- *          id:
- *              type: integer
- *          name:
- *              type: string
- * 
- * 
- */
-
+    apis: ["app.js"]
+};
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+/**
+ * @swagger
+ * /restaurants:
+ *   get:
+ *     summary: Get all restaurants
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: An array of restaurants
+ *         schema:
+ *           $ref: "#/definitions/Restaurant"
+ */
+app.get('/restaurants', (req, res) => {
+  res.json(restaurants);
 });
-
-app.get("/restaurants", (req,res)=>{
-    res.send(restaurants);
-})
 
 /**
  * @swagger
  * /restaurant:
- *  post:
- *      summary: add a restaurant
- *      requestBody:
- *          $ref: '#/components/requestBodies/RestaurantBody'
- *      required:
- *          -id:
- *          -name:
- * responses:
- *          201:
- *              description: created restaurant
- *
+ *   post:
+ *     summary: Add a new restaurant
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: "#/definitions/RestaurantInput"
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       201:
+ *         description: Created a new restaurant
+ *         schema:
+ *           $ref: "#/definitions/Restaurant"
+ * 
  * definitions:
- *  restaurant:
- *      properties:
- *          id:
- *              type: integer
- *          name:
- *              type: string
- * components:
- *  requestBodies:
- *      RestaurantBody:
- *          description: A JSON object of restaurant information
- *          required: true
- *          content:
- *              application/json:
- *              schema:
- *                  $ref: '#/definitions/restaurant'
- *       
+ *   Restaurant:
+ *     type: object
+ *     properties:
+ *       id:
+ *         type: integer
+ *       name:
+ *         type: string
+ *   RestaurantInput:
+ *     type: object
+ *     properties:
+ *       name:
+ *         type: string
+ */
+app.post('/restaurant', (req, res) => {
+  const restaurant = { id: restaurants.length, name: req.body.name };
+  restaurants.push(restaurant);
+  res.status(201).json(restaurant);
+});
+
+/**
+ * @swagger
+ * /restaurants/{id}:
+ *   delete:
+ *     summary: Delete a restaurant by ID
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         description: ID of the restaurant to delete
+ *         in: path
+ *         required: true
+ *         type: integer
+ *     responses:
+ *       200:
+ *         description: Restaurants left after deleting
+ *         schema:
+ *           $ref: "#/definitions/RestaurantList"
+ * 
+ * definitions:
+ *   RestaurantList:
+ *     type: object
+ *     properties:
+ *       restaurants:
+ *         type: array
+ *         items:
+ *           $ref: "#/definitions/Restaurant"
+ */
+app.delete('/restaurants/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  restaurants = restaurants.filter((restaurant) => restaurant.id !== id);
+  res.json({ restaurants });
+});
+
+ /**
+ * @swagger
+ * /restaurant/{id}:
+ *   put:
+ *     summary: Update a restaurant by ID
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         description: ID of the restaurant to update
+ *         in: path
+ *         required: true
+ *         type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/definitions/restaurant'
+ *     responses:
+ *       200:
+ *         description: success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/restaurant'
+ *       404:
+ *         description: Restaurant not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *     security:
+ *       - bearerAuth: []
+ * 
  */
 
+app.put("/restaurant/:id",(req,res)=>{
+    const id = parseInt(req.params.id);
+    const restaurantToUpdate = restaurants.find(item => item.id === id);
 
-app.post("/restaurant",(req,res)=>{
-    res.send(`${req.body.name} created`)
-})
+    if (!restaurantToUpdate) {
+      res.status(404).json({ message: "Restaurant not found" });
+    } else {
+      restaurantToUpdate.name = req.body.name;
+      res.json(restaurantToUpdate);
+    }
+});
 
 
-const port = process.env.PORT || 4000;
-app.listen(port, () => console.log(`Listening on port ${port}`));
