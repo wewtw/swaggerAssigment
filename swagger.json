@@ -18,7 +18,7 @@
     ],
 
     "paths": {
-        "/restaurants": {
+         "/swaggerAssigment/restaurants": {
             "get": {
                 "tags": ["Restaurants"],
                 "summary": "Get all Restaurants in system",
@@ -32,7 +32,7 @@
                 }
             }
         },
-        "/restaurant": {
+         "/swaggerAssigment/restaurant" {
             "post": {
                 "tags": ["Restaurants"],
                 "description": "Create new restaurant in system",
@@ -60,7 +60,7 @@
             }
         },
         
-        "/restaurants/{id}": {
+        "/swaggerAssigment/restaurants/{id}": {
                 "parameters": [
                     {
                         "name": "id",
@@ -95,7 +95,7 @@
                 }
             }
         },
-        "/restaurant/{id}": {
+        "/swaggerAssigment/restaurant/{id}": {
             "put": {
                 "tags": ["Restaurants"],
                 "description": "Update an existing restaurant",
