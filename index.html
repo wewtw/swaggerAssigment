@@ -5,6 +5,9 @@
     <title>My Restaurant Project CRUD</title>
     <script src="index.js"></script>
     <script src="app.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.52.0/swagger-ui.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.52.0/swagger-ui-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.52.0/swagger-ui-standalone-preset.min.js"></script>
   </head>
   <body>
     <h1>My Restaurant Project CRUD API</h1>
@@ -44,7 +47,16 @@
         <p>Delete a restaurant by ID.</p>
       </li>
     </ul>
-
-</script>
+     <script>
+      const ui = SwaggerUIBundle({
+        url: "/swagger.json",
+        dom_id: '#swagger-ui',
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset
+        ],
+        layout: "StandaloneLayout"
+      });
+    </script>
 </body>
 </html>
