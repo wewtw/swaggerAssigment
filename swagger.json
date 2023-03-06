@@ -32,7 +32,7 @@
                 }
             }
         },
-         "/swaggerAssigment/restaurant" {
+         "/swaggerAssigment/restaurant": {
             "post": {
                 "tags": ["Restaurants"],
                 "description": "Create new restaurant in system",
