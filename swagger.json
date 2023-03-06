@@ -1,24 +1,14 @@
 {
-    "swagger": "2.0",
-    "info": {
-        "version": "1.0.0", 
-        "title": "My Restaurant Project CRUD",
-        "description": "My User Project Application API",
-        "license": {
-            "name": "MIT",
-            "url": "https://opensource.org/licenses/MIT"
-        }
-    },
-    "host": "localhost:4000",
-    "basePath": "/",
-    "tags": [
-        {
-            "name": "Restaurants",
-            "description": "API for users in the system"
-        }
-    ],
+  "swagger": "2.0",
+  "info": {
+    "title": "My Restaurant Project CRUD",
+    "description": "API for managing restaurants",
+    "version": "1.0.0"
+  },
+  "host": "wewtw.github.io",
+  "basePath": "/swaggerAssigment",
     "schemes": [
-        "http"
+        "https"
     ],
     "consumes": [
         "application/json"
