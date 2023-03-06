@@ -57,7 +57,7 @@ app.get("/restaurants", (req,res)=>{
  *          -id:
  *          -name:
  * responses:
- *          201:
+ *          200:
  *              description: created restaurant
  *
  * definitions:
@@ -80,9 +80,114 @@ app.get("/restaurants", (req,res)=>{
  */
 
 
-app.post("/restaurant",(req,res)=>{
-    res.send(`${req.body.name} created`)
-})
 
+app.post('/restaurant', (req, res) => {
+  const restaurant = { id: restaurants.length, name: req.body.name };
+  restaurants.push(restaurant);
+  res.status(200).json(restaurant);
+});
+
+/**
+ * @swagger
+ * /restaurants/{id}:
+ *   delete:
+ *     summary: Delete a restaurant by ID
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         description: ID of the restaurant to delete
+ *         in: path
+ *         required: true
+ *         type: integer
+ *     responses:
+ *       200:
+ *         description: Restaurants left after deleting
+ *         schema:
+ *           $ref: "#/definitions/RestaurantList"
+ * 
+ * definitions:
+ *   RestaurantList:
+ *     type: object
+ *     properties:
+ *       restaurants:
+ *         type: array
+ *         items:
+ *           $ref: "#/definitions/Restaurant"
+ */
+app.delete('/restaurants/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  restaurants = restaurants.filter((restaurant) => restaurant.id !== id);
+  res.json({ restaurants });
+});
+
+/**
+ * @swagger
+ * /restaurant/{id}:
+ *   put:
+ *     summary: Update a restaurant by ID
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         description: ID of the restaurant to update
+ *         in: path
+ *         required: true
+ *         type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *        
+ /**
+ * @swagger
+ * /restaurant/{id}:
+ *   put:
+ *     summary: Update a restaurant by ID
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         description: ID of the restaurant to update
+ *         in: path
+ *         required: true
+ *         type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/definitions/restaurant'
+ *     responses:
+ *       200:
+ *         description: success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/restaurant'
+ *       404:
+ *         description: Restaurant not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *     security:
+ *       - bearerAuth: []
+ * 
+ */
+
+app.put("/restaurant/:id",(req,res)=>{
+    const id = parseInt(req.params.id);
+    const restaurantToUpdate = restaurants.find(item => item.id === id);
+
+    if (!restaurantToUpdate) {
+      res.status(404).json({ message: "Restaurant not found" });
+    } else {
+      restaurantToUpdate.name = req.body.name;
+      res.json(restaurantToUpdate);
+    }
+});
 
 app.listen(4000,()=>console.log('Listening on 4000'))
