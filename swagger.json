@@ -1,0 +1,166 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0", 
+        "title": "My Restaurant Project CRUD",
+        "description": "My User Project Application API",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:4000",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "Restaurants",
+            "description": "API for users in the system"
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+
+    "paths": {
+        "/restaurants": {
+            "get": {
+                "tags": ["Restaurants"],
+                "summary": "Get all Restaurants in system",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Restaurant"
+                        }
+                    }
+                }
+            }
+        },
+        "/restaurant": {
+            "post": {
+                "tags": ["Restaurants"],
+                "description": "Create new restaurant in system",
+                "parameters": [
+                    {
+                        "name": "restaurant",
+                        "in": "body",
+                        "description": "Restaurant that we want to create",
+                        "schema": {
+                            "$ref": "#/definitions/Restaurant"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New restaurant is created",
+                        "schema": {
+                            "$ref": "#/definitions/Restaurant"
+                        }
+                    }
+                }
+            }
+        },
+        
+        "/restaurants/{id}": {
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the restaurant to retrieve",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+              
+            "delete": {
+                "tags": [
+                    "Restaurants"
+                ],
+                "summary": "Delete a restaurant by ID",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the restaurant to delete",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Restaurant deleted"
+                    },
+                    "404": {
+                        "description": "Restaurant not found"
+                    }
+                }
+            }
+        },
+        "/restaurant/{id}": {
+            "put": {
+                "tags": ["Restaurants"],
+                "description": "Update an existing restaurant",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of restaurant to update",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "restaurant",
+                        "in": "body",
+                        "description": "Updated restaurant object",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Restaurant"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Restaurant is updated",
+                        "schema": {
+                            "$ref": "#/definitions/Restaurant"
+                        }
+                    },
+                    "404": {
+                        "description": "Restaurant not found"
+                    }
+                }
+            }
+        }
+    },
+    
+    "definitions": {
+        "Restaurant": {
+            "required": ["id","name"],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "uniqueItems": true
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
+
+
+
+
