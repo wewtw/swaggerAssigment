@@ -1,6 +1,6 @@
-const express = require('express')
-const swaggerJsDoc = require('swagger-jsdoc')
-const swaggerUi = require('swagger-ui-express')
+const express = require('express');
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
 var restaurants = [{id:0,name:"Woodshill"},{id:1,name:"Fiorellas"}]
 
@@ -41,7 +41,12 @@ const swaggerOptions = {
 
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + '/index.html');
+});
+
 app.get("/restaurants", (req,res)=>{
     res.send(restaurants);
 })
@@ -85,4 +90,5 @@ app.post("/restaurant",(req,res)=>{
 })
 
 
-app.listen(4000,()=>console.log('Listening on 4000'))
+const port = process.env.PORT || 4000;
+app.listen(port, () => console.log(`Listening on port ${port}`));
