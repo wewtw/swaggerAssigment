@@ -121,23 +121,6 @@ app.delete('/restaurants/:id', (req, res) => {
   res.json({ restaurants });
 });
 
-/**
- * @swagger
- * /restaurant/{id}:
- *   put:
- *     summary: Update a restaurant by ID
- *     produces:
- *       - application/json
- *     parameters:
- *       - name: id
- *         description: ID of the restaurant to update
- *         in: path
- *         required: true
- *         type: integer
- *     requestBody:
- *       required: true
- *       content:
- *        
  /**
  * @swagger
  * /restaurant/{id}:
